@@ -6,13 +6,15 @@
 
 # LOADING LIBS ------------------------------------------------------------
 install.packages (c("tidyverse", "dplyr", "janitor"))
+install.packages("openxlsx")
 install.packages("leaflet")
 install.packages("openxlsx")
+library(openxlsx)
 library("tidyverse","dplyr","janitor", "jsonlite")
 library(tidyverse)
 library(leaflet)
 library("dplyr","janitor")
-library(openxlsx)
+
 
 
 # LOADING DATA ------------------------------------------------------------
@@ -107,3 +109,6 @@ View(cd)
 # STORING DATA ------------------------------------------------------------
 write.xslx(gas_max, "gas_max.csv")
 xlsx::write.xlsx(gas_max, "gas_max.xlsx")
+
+openxlsx::write.xlsx(cd, "LowCost.xlsx")
+
