@@ -10,6 +10,7 @@ install.packages("openxlsx")
 install.packages("leaflet")
 install.packages("openxlsx")
 library(openxlsx)
+library(xml2)
 library("tidyverse","dplyr","janitor", "jsonlite")
 library(tidyverse)
 library(leaflet)
@@ -112,3 +113,24 @@ xlsx::write.xlsx(gas_max, "gas_max.xlsx")
 
 openxlsx::write.xlsx(cd, "LowCost.xlsx")
 
+# 27/10/23 ----------------------------------------------------------------
+
+media_precios_andalucia <- cd %>%
+  filter(provincia %in% c("ALMERÍA", "CÁDIZ", "CÓRDOBA", "GRANADA", "HUELVA", "JAÉN", "MÁLAGA", "SEVILLA")) %>%
+  group_by(provincia) %>%
+  summarize(avg_price_gasoleo = mean(precio_gasoleo_a, na.rm = TRUE))
+
+average_price_an <- media_precios_andalucia %>%
+  summarize(average_price_an = mean(avg_price_gasoleo, na.rm = TRUE))
+
+View(media_precios_andalucia)
+View(average_price_an)
+
+ccaa_official <- readxl::read_excel("ccaa_official.xls")
+
+colnames(ccaa_official) <- ccaa_official[1, ]
+ccaa_official <- ccaa_official[-1, ]
+
+cd <- merge(cd, ccaa_official, by.x = "idccaa", by.y = "CODIGO", all.x = TRUE)
+
+View(cd)
